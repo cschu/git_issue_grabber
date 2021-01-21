@@ -36,9 +36,10 @@ class GitLabAccess(GitAccess):
 def main():
 	ap = argparse.ArgumentParser()
 	ap.add_argument("token", type=str)
-	ap.add_argument("service", choices=("github", "gitlab"), default="github")
 	ap.add_argument("owner", type=str)
 	ap.add_argument("repo", type=str)
+	ap.add_argument("--service", choices=("github", "gitlab"), default="github")
+	ap.add_argument("--verbose", "-v", action="store_true")
 	args = ap.parse_args()
 
 	git = GitHubAccess if args.service == "github" else GitLabAccess
@@ -61,7 +62,8 @@ def main():
 		page += 1
 
 
-	# print(all_issues)
+	if args.verbose:
+		print(all_issues)
 	closed_c, created_c = Counter(), Counter()
 	for item in all_issues:
 		if item.get("pull_request"):
